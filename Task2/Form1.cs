@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using HelloLibrary;
-using System.Runtime;
 
 namespace Task2
 {
