@@ -37,7 +37,7 @@ namespace Advanced
 
         public void StartSearch()
         {
-            Notificator?.Invoke("Start");
+            Notificator?.Invoke("Start search");
             Search(_directoryInfo, 0);
             if (_isFiltered)
             {
@@ -46,32 +46,41 @@ namespace Advanced
                 FilteredSearch(_directoryInfo, 0);
             }
 
-            Notificator?.Invoke("Finish");
+            Notificator?.Invoke("Search finished");
         }
 
         private void FilteredSearch(DirectoryInfo info, int tabsCount)
         {
             FilteredDirectoryFound?.Invoke(info.Name);
             var tabs = string.Empty;
-            for (var i = 0; i < tabsCount; i++) tabs += "  ";
-            if (IsNeedToPrint(info.Name))
+            for (var i = 0; i < tabsCount; i++)
+            {
+                tabs += "  ";
+            }
+
+            if (IsNeeded(info.Name))
             {
                 Console.WriteLine(tabs + info.Name + "/");
                 var directories = info.GetDirectories();
-                DirectoryOutput(info);
+                PrintDirectory(info);
                 _isFirstDirectory = false;
-                foreach (var directory in directories) FilteredSearch(directory, tabsCount + 1);
+                foreach (var directory in directories)
+                {
+                    FilteredSearch(directory, tabsCount + 1);
+                }
             }
 
-            void DirectoryOutput(DirectoryInfo directory)
+            void PrintDirectory(DirectoryInfo directory)
             {
                 var files = directory.GetFiles();
                 foreach (var file in files)
-                    if (IsNeedToPrint(file.Name))
+                {
+                    if (IsNeeded(file.Name))
                     {
                         FilteredFileFound?.Invoke(file.Name);
                         Console.WriteLine("  " + tabs + file.Name);
                     }
+                }
             }
         }
 
@@ -79,14 +88,20 @@ namespace Advanced
         {
             DirectoryFound?.Invoke(info.Name);
             var tabs = string.Empty;
-            for (var i = 0; i < tabsCount; i++) tabs += "  ";
+            for (var i = 0; i < tabsCount; i++)
+            {
+                tabs += "  ";
+            }
 
             Console.WriteLine(tabs + info.Name + "/");
             var directories = info.GetDirectories();
-            DirectoryOutput(info);
-            foreach (var directory in directories) Search(directory, tabsCount + 1);
+            PrintDirectory(info);
+            foreach (var directory in directories)
+            {
+                Search(directory, tabsCount + 1);
+            }
 
-            void DirectoryOutput(DirectoryInfo directory)
+            void PrintDirectory(DirectoryInfo directory)
             {
                 var files = directory.GetFiles();
                 foreach (var file in files)
@@ -99,7 +114,7 @@ namespace Advanced
 
         public void StopSearch()
         {
-            Notificator?.Invoke("Finish");
+            Notificator?.Invoke("Search stopped");
             Environment.Exit(0);
         }
 
@@ -108,7 +123,7 @@ namespace Advanced
             return this._filter?.Invoke(name) ?? true;
         }
 
-        private bool IsNeedToPrint(string name)
+        private bool IsNeeded(string name)
         {
             return !ExcludedNames.Contains(name) && (CheckByName(name) || _isFirstDirectory);
         }
@@ -116,9 +131,13 @@ namespace Advanced
         private void CreateDirectory()
         {
             if (Directory.Exists(_startFolder))
+            {
                 _directoryInfo = new DirectoryInfo(_startFolder);
+            }
             else
+            {
                 throw new ArgumentException("There is no such directory");
+            }
         }
     }
 }

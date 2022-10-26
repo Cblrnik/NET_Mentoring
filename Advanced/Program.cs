@@ -11,33 +11,33 @@ namespace Advanced
     {
         static void Main(string[] args)
         {
-            FileSystemVisitor file = new FileSystemVisitor("D:\\Temp", (name) => name.Contains("open"));
+            FileSystemVisitor visitor = new FileSystemVisitor("D:\\Temp", (name) => name.Contains("open"));
             #region Examples
-            file.Notificator += Console.WriteLine;
-            file.FilteredFileFound += (name) =>
+            visitor.Notificator += Console.WriteLine;
+            visitor.FilteredFileFound += (name) =>
             {
                 if (name.StartsWith("s"))
                 {
                     Console.WriteLine("Some Action");
                 }
             };
-            file.FileFound += (name) =>
+            visitor.FileFound += (name) =>
             {
                 if (name.Contains(".html"))
                 {
-                    file.ExcludedNames.Add(name);
+                    visitor.ExcludedNames.Add(name);
                 }
             };
 
-            file.FilteredDirectoryFound += (name) =>
+            visitor.FilteredDirectoryFound += (name) =>
             {
                 if (name.Contains("services"))
                 {
-                    file.StopSearch();
+                    visitor.StopSearch();
                 }
             };
             #endregion
-            file.StartSearch();
+            visitor.StartSearch();
         }
     }
 }
