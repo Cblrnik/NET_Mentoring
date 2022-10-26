@@ -13,7 +13,7 @@ namespace Advanced
         {
             FileSystemVisitor file = new FileSystemVisitor("D:\\Temp", (name) => name.Contains("open"));
             #region Examples
-            file.Notificator += (step) => Console.WriteLine(step);
+            file.Notificator += Console.WriteLine;
             file.FilteredFileFound += (name) =>
             {
                 if (name.StartsWith("s"))
@@ -25,7 +25,7 @@ namespace Advanced
             {
                 if (name.Contains(".html"))
                 {
-                    file.excludedNames.Add(name);
+                    file.ExcludedNames.Add(name);
                 }
             };
 
