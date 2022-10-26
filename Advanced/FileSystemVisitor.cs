@@ -37,7 +37,7 @@ namespace Advanced
 
         public void StartSearch()
         {
-            Notificator?.Invoke("Start search");
+            Notificator?.Invoke("SearchStarted");
             Search(_directoryInfo, 0);
             if (_isFiltered)
             {
@@ -46,7 +46,7 @@ namespace Advanced
                 FilteredSearch(_directoryInfo, 0);
             }
 
-            Notificator?.Invoke("Search finished");
+            Notificator?.Invoke("SearchFinished");
         }
 
         private void FilteredSearch(DirectoryInfo info, int tabsCount)
@@ -114,8 +114,7 @@ namespace Advanced
 
         public void StopSearch()
         {
-            Notificator?.Invoke("Search stopped");
-            Environment.Exit(0);
+            Notificator?.Invoke("SearchStopped");
         }
 
         private bool CheckByName(string name)
