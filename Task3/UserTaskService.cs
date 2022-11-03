@@ -15,17 +15,17 @@ namespace Task3
         public void AddTaskForUser(int userId, UserTask task)
         {
             if (userId < 0)
-                throw new ArgumentOutOfRangeException("Invalid userId", new Exception());
+                throw new ArgumentOutOfRangeException();
 
             var user = _userDao.GetUser(userId);
             if (user == null)
-                throw new ArgumentNullException("User not found", new Exception());
+                throw new ArgumentNullException();
 
             var tasks = user.Tasks;
             foreach (var t in tasks)
             {
                 if (string.Equals(task.Description, t.Description, StringComparison.OrdinalIgnoreCase))
-                    throw new ArgumentException("The task already exists", new Exception());
+                    throw new ArgumentException();
             }
 
             tasks.Add(task);

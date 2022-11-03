@@ -1,4 +1,5 @@
-﻿using Task3.DoNotChange;
+﻿using System;
+using Task3.DoNotChange;
 
 namespace Task3
 {
@@ -31,9 +32,20 @@ namespace Task3
             {
                 _taskService.AddTaskForUser(userId, task);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                message = ex.Message;
+                if (ex is ArgumentOutOfRangeException)
+                {
+                    message = "The task already exists";
+                }
+                if (ex is ArgumentException)
+                {
+                    message = "Invalid userId";
+                }
+                if (ex is ArgumentNullException)
+                {
+                    message = "User not found";
+                }
             }
 
             return message;

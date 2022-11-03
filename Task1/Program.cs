@@ -12,7 +12,7 @@ namespace Task1
 
                 Console.WriteLine(line[0]);
             }
-            catch
+            catch (IndexOutOfRangeException)
             {
                 Console.WriteLine("Your string is empty");
             }
