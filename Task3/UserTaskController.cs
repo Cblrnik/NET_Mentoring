@@ -34,18 +34,7 @@ namespace Task3
             }
             catch (Exception ex)
             {
-                if (ex is ArgumentOutOfRangeException)
-                {
-                    message = "The task already exists";
-                }
-                if (ex is ArgumentException)
-                {
-                    message = "Invalid userId";
-                }
-                if (ex is ArgumentNullException)
-                {
-                    message = "User not found";
-                }
+                message = ex.Message;
             }
 
             return message;
