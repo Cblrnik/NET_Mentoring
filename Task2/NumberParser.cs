@@ -31,8 +31,8 @@ namespace Task2
                 return int.MaxValue;
             }
 
-            int number = 0;
-            int bit = 0;
+            var number = 0;
+            var bit = 0;
             for (int i = stringValue.Length - 1; i >= 0; i--)
             {
                 switch (stringValue[i])
