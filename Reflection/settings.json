@@ -1,0 +1,6 @@
+{
+  "SecretString": "Secret key value",
+  "SecretNumber": "91",
+  "SecretFloat": "24.1",
+  "SecretTimeSpan": "10:21:07"
+}
