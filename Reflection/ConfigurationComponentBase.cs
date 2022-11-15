@@ -21,31 +21,31 @@ namespace Reflection
 
         public void LoadSettings()
         {
-            Type type = typeof(ConfigurationComponentBase);
+            var type = typeof(ConfigurationComponentBase);
             var props = type.GetProperties();
             foreach (var item in props)
             {
                 foreach (var attribute in item.GetCustomAttributes())
                 {
-                    ConfigurationItemAttribute validation = attribute as ConfigurationItemAttribute;
+                    var configAttribute = attribute as ConfigurationItemAttribute;
 
                     var converter = TypeDescriptor.GetConverter(item.PropertyType);
-                    item.SetValue(this, converter.ConvertFromString(validation.Value.ToString()));
+                    item.SetValue(this, converter.ConvertFromString(configAttribute.Value.ToString()));
                 }
             }
         }
 
         public void SaveSettings()
         {
-            Type type = typeof(ConfigurationComponentBase);
+            var type = typeof(ConfigurationComponentBase);
             var props = type.GetProperties();
             foreach (var item in props)
             {
                 foreach (var attribute in item.GetCustomAttributes())
                 {
-                    ConfigurationItemAttribute validation = attribute as ConfigurationItemAttribute;
+                    var configAttribute = attribute as ConfigurationItemAttribute;
 
-                    validation.Value = item.GetValue(this);
+                    configAttribute.Value = item.GetValue(this);
                 }
             }
         }

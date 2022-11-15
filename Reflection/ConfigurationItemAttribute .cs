@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 
@@ -9,16 +10,16 @@ namespace Reflection
     [AttributeUsage(AttributeTargets.Property)]
     public class ConfigurationItemAttribute : Attribute
     {
-        private readonly IConfigurationRoot configuration;
-        private readonly JsonConfigurationProvider jsonConfigurationProvider;
-        private readonly string settingName;
-        private readonly int providerType;
+        private readonly IConfigurationRoot _configuration;
+        private readonly JsonConfigurationProvider _jsonConfigurationProvider;
+        private readonly string _settingName;
+        private readonly int _providerType;
 
         private string FileName
         {
             get
             {
-                if (this.providerType == 0)
+                if (_providerType == 0)
                 {
                     return "appsettings.json";
                 }
@@ -32,12 +33,12 @@ namespace Reflection
         public object Value {
             get
             {
-                if (this.providerType == 0)
+                if (_providerType == 0)
                 {
-                    return this.configuration[this.settingName];
+                    return _configuration[_settingName];
                 }
 
-                if (this.jsonConfigurationProvider.TryGet(this.settingName, out string value))
+                if (_jsonConfigurationProvider.TryGet(_settingName, out string value))
                 {
                     return value;
                 };
@@ -47,30 +48,30 @@ namespace Reflection
 
             set
             {
-                if (value != null && !value.ToString().Equals(this.Value))
+                if (value != null && !value.ToString().Equals(Value))
                 {
-                    if (this.providerType == 0)
+                    if (_providerType == 0)
                     {
-                        this.configuration[this.settingName] = value.ToString();
+                        _configuration[_settingName] = value.ToString();
                     }
                     else
                     {
-                        this.jsonConfigurationProvider.Set(settingName, value.ToString());
+                        _jsonConfigurationProvider.Set(_settingName, value.ToString());
                     }
 
-                    this.SaveSettings();
+                    SaveSettings();
                 }
             }
         }
 
         public ConfigurationItemAttribute(string settingName, int providerType)
         {
-            this.settingName = settingName;
-            this.providerType = providerType;
+            _settingName = settingName;
+            _providerType = providerType;
             switch (providerType)
             {
                 case 0:
-                    this.configuration = new ConfigurationBuilder()
+                    _configuration = new ConfigurationBuilder()
                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                        .Build();
                     break;
@@ -81,10 +82,10 @@ namespace Reflection
                         ReloadOnChange = true
                     };
 
-                    this.jsonConfigurationProvider = new JsonConfigurationProvider(source);
+                    _jsonConfigurationProvider = new JsonConfigurationProvider(source);
                     using (var sr = new StreamReader("settings.json"))
                     {
-                        this.jsonConfigurationProvider.Load(sr.BaseStream);
+                        _jsonConfigurationProvider.Load(sr.BaseStream);
                     }
                         
                     break;
@@ -95,14 +96,14 @@ namespace Reflection
         {
             try
             {
-                var filePath = Path.Combine(AppContext.BaseDirectory, this.FileName);
-                string json = File.ReadAllText(filePath);
-                dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
+                var filePath = Path.Combine(AppContext.BaseDirectory, FileName);
+                var json = File.ReadAllText(filePath);
+                dynamic jsonObj = JsonConvert.DeserializeObject(json);
 
-                jsonObj[this.settingName] = JToken.Parse($"\"{this.Value}\"");
+                jsonObj[_settingName] = JToken.Parse($"\"{Value}\"");
 
 
-                string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
+                var output = JsonConvert.SerializeObject(jsonObj,Formatting.Indented);
                 File.WriteAllText(filePath, output);
             }
             catch (Exception ex)
