@@ -18,7 +18,7 @@ namespace Tasks
         public DoublyLinkedList()
         {
             arrayData = null;
-            this.enumerator = new DoublyLinkedListEnumerator<T>(this);
+            enumerator = new DoublyLinkedListEnumerator<T>(this);
         }
 
         public DoublyLinkedList(int capacity)
@@ -32,77 +32,77 @@ namespace Tasks
                 arrayData = new T[capacity];
             }
 
-            this.enumerator = new DoublyLinkedListEnumerator<T>(this);
+            enumerator = new DoublyLinkedListEnumerator<T>(this);
         }
 
-        public int Length => this.indexer;
+        public int Length => indexer;
 
         public void Add(T e)
         {
-            this.version++;
-            if (this.arrayData is null)
+            version++;
+            if (arrayData is null)
             {
                 T[] newArray = new T[1];
-                this.arrayData = newArray;
+                arrayData = newArray;
             }
-            else if (this.indexer == this.arrayData.Length)
+            else if (indexer == arrayData.Length)
             {
-                T[] newArray = new T[2 * this.arrayData.Length];
-                Array.Copy(this.arrayData, 0, newArray, 0, this.indexer);
-                this.arrayData = newArray;
+                T[] newArray = new T[2 * arrayData.Length];
+                Array.Copy(arrayData, 0, newArray, 0, indexer);
+                arrayData = newArray;
             }
 
-            this.arrayData[this.indexer] = e;
-            this.indexer++;
+            arrayData[indexer] = e;
+            indexer++;
         }
 
         public void AddAt(int index, T e)
         {
-            this.version++;
-            if (this.arrayData is null)
+            version++;
+            if (arrayData is null)
             {
                 T[] newArray = new T[1];
-                this.arrayData = newArray;
+                arrayData = newArray;
             }
             else if (index == 0)
             {
-                T[] newArray = new T[this.arrayData.Length];
-                if (this.indexer == this.arrayData.Length)
+                T[] newArray = new T[arrayData.Length];
+                if (indexer == arrayData.Length)
                 {
-                    newArray = new T[2 * this.arrayData.Length];
+                    newArray = new T[2 * arrayData.Length];
                 }
 
                 newArray[0] = e;
-                Array.Copy(this.arrayData, 0, newArray, 1, this.indexer);
-                this.arrayData = newArray;
+                Array.Copy(arrayData, 0, newArray, 1, indexer);
+                arrayData = newArray;
             }
-            else if (this.indexer == this.arrayData.Length)
+            else if (indexer == arrayData.Length)
             {
-                T[] newArray = new T[2 * this.arrayData.Length];
-                var count = this.indexer - index + 1;
-                Array.Copy(this.arrayData, 0, newArray, 0, count);
+                T[] newArray = new T[2 * arrayData.Length];
+                var count = indexer - index + 1;
+                Array.Copy(arrayData, 0, newArray, 0, count);
                 newArray[index] = e;
-                Array.Copy(this.arrayData, this.indexer - index, newArray, 0, this.indexer - count);
-                this.arrayData = newArray;
+                Array.Copy(arrayData, indexer - index, newArray, 0, indexer - count);
+                arrayData = newArray;
             }
 
-            this.indexer++;
+            indexer++;
         }
 
         public T ElementAt(int index)
         {
             if (arrayData is null || index < 0 || index > indexer)
             {
-                throw new IndexOutOfRangeException();
+                throw new IndexOutOfRangeException(nameof(index));
             }
 
-            return this.arrayData[index];
+            return arrayData[index];
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            this.enumerator.Version = this.version;
-            return this.enumerator;
+            enumerator.Version = version;
+            return enumerator;
 
         }
 
@@ -110,7 +110,7 @@ namespace Tasks
         {
             var arrayLength = arrayData.Length;
             var isDeleted = false;
-            Func<T, bool> predicate = (T element) =>
+            bool predicate(T element)
             {
                 if (!element.Equals(item))
                 {
@@ -125,7 +125,7 @@ namespace Tasks
                     isDeleted = true;
                     return false;
                 }
-            };
+            }
             arrayData = arrayData.Where(e => predicate(e)).ToArray();
             if (arrayData.Length != arrayLength)
             {
@@ -137,12 +137,12 @@ namespace Tasks
         {
             if (arrayData is null || index < 0 || index > indexer)
             {
-                throw new IndexOutOfRangeException();
+                throw new IndexOutOfRangeException(nameof(index));
             }
 
             version++;
 
-            var elementToRemove = this.arrayData[index];
+            var elementToRemove = arrayData[index];
 
             T[] dest = new T[arrayData.Length - 1];
             if (index > 0)
@@ -163,14 +163,13 @@ namespace Tasks
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
 
         public T[] ToArray()
         {
             return (T[])arrayData.Clone();
         }
-
 
         public struct DoublyLinkedListEnumerator<TK> : IEnumerator<TK>
         {
@@ -185,9 +184,9 @@ namespace Tasks
                 }
 
                 this.list = list;
-                this.Position = 0;
-                this.Version = list.version;
-                this.current = default;
+                Position = 0;
+                Version = list.version;
+                current = default;
             }
 
             /// <summary>
@@ -195,7 +194,7 @@ namespace Tasks
             /// </summary>
             public TK Current
             {
-                get => this.current;
+                get => current;
             }
 
             /// <inheritdoc/>
@@ -203,12 +202,12 @@ namespace Tasks
             {
                 get
                 {
-                    if (this.Position > this.list.Length)
+                    if (Position > list.Length)
                     {
-                        throw new InvalidOperationException();
+                        throw new InvalidOperationException("Position is more than length");
                     }
 
-                    return this.Current;
+                    return Current;
                 }
             }
 
@@ -230,41 +229,40 @@ namespace Tasks
             /// <inheritdoc/>
             public bool MoveNext()
             {
-                TK[] localList = this.list.arrayData;
+                TK[] localList = list.arrayData;
 
-                if (this.Version != this.list.version)
+                if (Version != list.version)
                 {
-                    throw new InvalidOperationException();
+                    throw new InvalidOperationException("Versions are not the same");
                 }
 
-                if ((uint)this.Position < this.list.Length)
+                if ((uint)Position < list.Length)
                 {
-                    this.current = localList[this.Position++];
+                    current = localList[Position++];
                     return true;
                 }
 
-                return this.MoveNextRare();
+                return MoveNextRare();
             }
 
             /// <inheritdoc/>
             public void Reset()
             {
-                if (this.Version != this.list.version)
+                if (Version != list.version)
                 {
-                    throw new InvalidOperationException();
+                    throw new InvalidOperationException("Versions are not the same");
                 }
 
-                this.Position = this.list.Length - 1;
-                this.current = default;
+                Position = list.Length - 1;
+                current = default;
             }
 
             private bool MoveNextRare()
             {
-                this.Position = this.list.Length + 1;
-                this.current = default;
+                Position = list.Length + 1;
+                current = default;
                 return false;
             }
         }
-
     }
 }
