@@ -64,7 +64,8 @@ namespace Tasks
                 T[] newArray = new T[1];
                 arrayData = newArray;
             }
-            else if (index == 0)
+
+            if (index == 0)
             {
                 T[] newArray = new T[arrayData.Length];
                 if (indexer == arrayData.Length)
