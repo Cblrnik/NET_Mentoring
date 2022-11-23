@@ -1,165 +1,199 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Drawing;
 using System.Linq;
+using System.Xml.Linq;
 using Tasks.DoNotChange;
 
 namespace Tasks
 {
     public class DoublyLinkedList<T> : IDoublyLinkedList<T>
     {
-        private T[] arrayData;
-        private int indexer;
+        private Node<T> head;
         private int version = 0;
+        private int count = 0;
+
         private DoublyLinkedListEnumerator<T> enumerator;
 
         public DoublyLinkedList()
         {
-            arrayData = null;
             enumerator = new DoublyLinkedListEnumerator<T>(this);
         }
 
-        public DoublyLinkedList(int capacity)
-        {
-            if (capacity == 0)
-            {
-                arrayData = null;
-            }
-            else
-            {
-                arrayData = new T[capacity];
-            }
+        public int Length => count;
 
-            enumerator = new DoublyLinkedListEnumerator<T>(this);
-        }
-
-        public int Length => indexer;
-
-        public void Add(T e)
+        public void Add(T data)
         {
             version++;
-            if (arrayData is null)
+
+            var newNode = new Node<T>(data);
+
+            if (head == null)
             {
-                T[] newArray = new T[1];
-                arrayData = newArray;
-            }
-            else if (indexer == arrayData.Length)
-            {
-                T[] newArray = new T[2 * arrayData.Length];
-                Array.Copy(arrayData, 0, newArray, 0, indexer);
-                arrayData = newArray;
+                head = newNode;
+                count++;
+                return;
             }
 
-            arrayData[indexer] = e;
-            indexer++;
+            var last = GetLastNode();
+            last.next = newNode;
+            newNode.previous = last;
+            count++;
+        }
+
+        private Node<T> GetLastNode()
+        {
+            var temp = head;
+            while (temp.next != null)
+            {
+                temp = temp.next;
+            }
+            return temp;
         }
 
         public void AddAt(int index, T e)
         {
             version++;
-            if (arrayData is null)
+
+            var node = head;
+
+            if (node == null)
             {
-                T[] newArray = new T[1];
-                arrayData = newArray;
+                head = new Node<T>(e);
+                count++;
+                return;
             }
 
-            if (index == 0)
+            for (int i = 0; i < index; i++)
             {
-                T[] newArray = new T[arrayData.Length];
-                if (indexer == arrayData.Length)
+                if (node.next != null)
                 {
-                    newArray = new T[2 * arrayData.Length];
+                    node = node.next;
                 }
-
-                newArray[0] = e;
-                Array.Copy(arrayData, 0, newArray, 1, indexer);
-                arrayData = newArray;
+                
             }
-            else if (indexer == arrayData.Length)
+            var newNode = new Node<T>(e);
+
+            if (index == count)
             {
-                T[] newArray = new T[2 * arrayData.Length];
-                var count = indexer - index + 1;
-                Array.Copy(arrayData, 0, newArray, 0, count);
-                newArray[index] = e;
-                Array.Copy(arrayData, indexer - index, newArray, 0, indexer - count);
-                arrayData = newArray;
+                newNode.next = null;
+                newNode.previous = node;
+
+                node.next = newNode;
+            }
+            else
+            {
+                newNode.next = node;
+                newNode.previous = node.previous;
+
+                if (node != head)
+                {
+                    node.previous.next = newNode;
+                    node.previous = newNode;
+                }
+                else
+                {
+                    head.previous = newNode;
+                    head = newNode;
+                }
             }
 
-            indexer++;
+            count++;
         }
 
         public T ElementAt(int index)
         {
-            if (arrayData is null || index < 0 || index > indexer)
+            if (index < 0 || index >= count)
             {
                 throw new IndexOutOfRangeException(nameof(index));
             }
 
-            return arrayData[index];
+            var node = head;
+
+            for (int i = 0; i < index; i++)
+            {
+                node = node.next;
+            }
+
+            return node.data;
         }
 
         public IEnumerator<T> GetEnumerator()
         {
             enumerator.Version = version;
             return enumerator;
-
         }
 
         public void Remove(T item)
         {
-            var arrayLength = arrayData.Length;
-            var isDeleted = false;
-            bool predicate(T element)
+            version++;
+            var temp = head;
+            if (temp != null && temp.data.Equals(item))
             {
-                if (!element.Equals(item))
-                {
-                    return true;
-                }
-                else if (isDeleted)
-                {
-                    return true;
-                }
-                else
-                {
-                    isDeleted = true;
-                    return false;
-                }
+                head = temp.next;
+                head.previous = null;
+                count--;
+                return;
             }
-            arrayData = arrayData.Where(e => predicate(e)).ToArray();
-            if (arrayData.Length != arrayLength)
+            while (temp != null && !temp.data.Equals(item))
             {
-                indexer--;
+                temp = temp.next;
             }
+
+            if (temp == null)
+            {
+                return;
+            }
+
+            if (temp.next != null)
+            {
+                temp.next.previous = temp.previous;
+            }
+
+            if (temp.previous != null)
+            {
+                temp.previous.next = temp.next;
+            }
+
+            count--;
         }
 
         public T RemoveAt(int index)
         {
-            if (arrayData is null || index < 0 || index > indexer)
+            if (index < 0 || index >= count)
             {
                 throw new IndexOutOfRangeException(nameof(index));
             }
 
             version++;
 
-            var elementToRemove = arrayData[index];
-
-            T[] dest = new T[arrayData.Length - 1];
-            if (index > 0)
+            var node = head;
+            if (node != null && index == 0)
             {
-                Array.Copy(arrayData, 0, dest, 0, index);
+                head = node.next;
+                head.previous = null;
+                count--;
+                return node.data;
+            }
+            
+            var indexer = 0;
+            while (node != null && indexer++ != index)
+            {
+                node = node.next;
             }
 
-            if (index < arrayData.Length - 1)
+            if (node.next != null)
             {
-                Array.Copy(arrayData, index + 1, dest, index, arrayData.Length - index - 1);
+                node.next.previous = node.previous;
             }
 
-            arrayData = dest;
-            indexer--;
+            if (node.previous != null)
+            {
+                node.previous.next = node.next;
+            }
 
-            return elementToRemove;
+            count--;
+            return node.data;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -167,15 +201,11 @@ namespace Tasks
             return GetEnumerator();
         }
 
-        public T[] ToArray()
-        {
-            return (T[])arrayData.Clone();
-        }
-
         public struct DoublyLinkedListEnumerator<TK> : IEnumerator<TK>
         {
             private readonly DoublyLinkedList<TK> list;
             private TK current;
+            private Node<TK> currentNode;
 
             public DoublyLinkedListEnumerator(DoublyLinkedList<TK> list)
             {
@@ -188,6 +218,7 @@ namespace Tasks
                 Position = 0;
                 Version = list.version;
                 current = default;
+                currentNode = default;
             }
 
             /// <summary>
@@ -230,16 +261,17 @@ namespace Tasks
             /// <inheritdoc/>
             public bool MoveNext()
             {
-                TK[] localList = list.arrayData;
-
                 if (Version != list.version)
                 {
                     throw new InvalidOperationException("Versions are not the same");
                 }
 
-                if ((uint)Position < list.Length)
+                if ((uint)Position++ < list.count)
                 {
-                    current = localList[Position++];
+                    currentNode ??= list.head;
+                    current = currentNode.data;
+                    currentNode = currentNode.next;
+                    
                     return true;
                 }
 
@@ -256,6 +288,7 @@ namespace Tasks
 
                 Position = list.Length - 1;
                 current = default;
+                currentNode = list.head;
             }
 
             private bool MoveNextRare()
