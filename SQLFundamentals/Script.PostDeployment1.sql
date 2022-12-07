@@ -27,6 +27,33 @@ IF (@VarDecimalSupported > 0)
         EXECUTE sp_db_vardecimal_storage_format N'$(DatabaseName)', 'ON';
     END
 
+IF (NOT EXISTS(SELECT * FROM Address))  
+BEGIN  
+    Insert into Address(Street,City,State,ZipCode) values (N'Пушкина', N'Минск', N'Минск', N'100000');
+    DECLARE @AddressId INT;
+    SELECT @AddressId = SCOPE_IDENTITY();
+END
+
+IF (NOT EXISTS(SELECT * FROM Person))  
+BEGIN  
+    Insert into Person(FirstName,LastName) values (N'Иван', N'Иванов');
+    DECLARE @PersonId INT;
+    SELECT @PersonId = SCOPE_IDENTITY();
+END
+
+IF (NOT EXISTS(SELECT * FROM Employee))  
+BEGIN  
+    Insert into Employee(CompanyName,Position,EmployeeName, PersonId, AddressId) values ('EPAM', 'Developer', N'Иванов Иван', @PersonId, @AddressId);
+END
+
+IF (NOT EXISTS(SELECT * FROM Company))  
+BEGIN  
+    Insert into Company(Name, AddressId) values ('EPAM', @AddressId);
+END
+
+
+
+
 
 GO
 PRINT N'Update complete.';
