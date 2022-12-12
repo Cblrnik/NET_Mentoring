@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using BrainstormSessions.Core.Interfaces;
+using BrainstormSessions.Services;
 using BrainstormSessions.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -10,11 +11,14 @@ namespace BrainstormSessions.Controllers
     {
         private readonly IBrainstormSessionRepository _sessionRepository;
         private readonly ILogger _logger;
+        private readonly IEmailLogService _emailLogger;
+        
 
-        public SessionController(IBrainstormSessionRepository sessionRepository, ILogger logger)
+        public SessionController(IBrainstormSessionRepository sessionRepository, ILogger logger , IEmailLogService emailLogger)
         {
             _sessionRepository = sessionRepository;
             _logger = logger;
+            _emailLogger = emailLogger;
         }
 
         public async Task<IActionResult> Index(int? id)
@@ -40,6 +44,8 @@ namespace BrainstormSessions.Controllers
                 Name = session.Name,
                 Id = session.Id
             };
+
+            _emailLogger.Log("Ok response", Serilog.Events.LogEventLevel.Error);
 
             _logger.Debug("Ok response");
             return View(viewModel);

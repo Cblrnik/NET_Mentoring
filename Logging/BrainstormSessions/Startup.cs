@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using BrainstormSessions.Core.Interfaces;
 using BrainstormSessions.Core.Model;
 using BrainstormSessions.Infrastructure;
+using BrainstormSessions.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +31,8 @@ namespace BrainstormSessions
                 .WriteTo.InMemory()
                 .CreateLogger();
             services.AddSingleton(typeof(ILogger), logger);
+
+            services.AddScoped<IEmailLogService, EmailLogService>();
         }
 
         public void Configure(IApplicationBuilder app,

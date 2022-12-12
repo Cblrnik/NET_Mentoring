@@ -6,6 +6,7 @@ using BrainstormSessions.Api;
 using BrainstormSessions.Controllers;
 using BrainstormSessions.Core.Interfaces;
 using BrainstormSessions.Core.Model;
+using BrainstormSessions.Services;
 using log4net.Appender;
 using log4net.Config;
 using log4net.Core;
@@ -92,18 +93,12 @@ namespace BrainstormSessions.Test.UnitTests
             // Arrange
             int testSessionId = 1;
             var mockRepo = new Mock<IBrainstormSessionRepository>();
+            var mockLog = new Mock<IEmailLogService>();
             mockRepo.Setup(repo => repo.GetByIdAsync(testSessionId))
                 .ReturnsAsync(GetTestSessions().FirstOrDefault(
                     s => s.Id == testSessionId));
 
-            var logger = new LoggerConfiguration()
-               .WriteTo.Email(
-                    fromEmail: "app@gmail.com",
-                    toEmail: "rnehaikov@gmail.com",
-                    mailServer: "smtp.gmail.com"
-                ).CreateLogger();
-
-            var controller = new SessionController(mockRepo.Object, _logger);
+            var controller = new SessionController(mockRepo.Object, _logger, mockLog.Object);
 
             // Act
             var result = await controller.Index(testSessionId);
