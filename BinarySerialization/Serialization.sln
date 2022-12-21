@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XMLSerialization", "XMLSeri
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonSerialization", "JsonSerialization\JsonSerialization.csproj", "{7CF21998-C0A9-43EF-8DBB-EEAF8F55C61B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CostomSerialization", "CostomSerialization\CostomSerialization.csproj", "{4FA8D413-8010-4210-81A0-55D1B6EE5357}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomSerialization", "CustomSerialization\CustomSerialization.csproj", "{4FA8D413-8010-4210-81A0-55D1B6EE5357}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

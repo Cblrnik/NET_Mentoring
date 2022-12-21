@@ -30,31 +30,29 @@ namespace BinarySerialization
             };
 
             Serialize(dep, "Department.bin");
-            Deserialize("Department.bin");
+            var newDepatrment = Deserialize("Department.bin");
+
+            var depClone = newDepatrment.Clone();
+
+            Console.WriteLine(object.ReferenceEquals(depClone, newDepatrment));
         }
 
         public static void Serialize(Department dep, string fileName)
         {
-            var ms = File.OpenWrite(fileName);
+            using var ms = File.OpenWrite(fileName);
 
             var formatter = new BinaryFormatter();
             formatter.Serialize(ms, dep);
-            ms.Flush();
-            ms.Close();
-            ms.Dispose();
         }
 
         public static Department Deserialize(string fileName)
         {
             var formatter = new BinaryFormatter();
 
-            var fs = File.Open(fileName, FileMode.Open);
+            using var fs = File.Open(fileName, FileMode.Open);
 
             var obj = formatter.Deserialize(fs);
             var dep = (Department)obj;
-            fs.Flush();
-            fs.Close();
-            fs.Dispose();
 
             return dep;
         }

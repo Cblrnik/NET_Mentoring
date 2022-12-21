@@ -19,26 +19,19 @@ namespace CostomSerialization
 
         public static void Serialize(Employee dep, string fileName)
         {
-            var ms = File.OpenWrite(fileName);
+            using var ms = File.OpenWrite(fileName);
 
             var formatter = new BinaryFormatter();
             formatter.Serialize(ms, dep);
-            ms.Flush();
-            ms.Close();
-            ms.Dispose();
         }
 
         public static Employee Deserialize(string fileName)
         {
             var formatter = new BinaryFormatter();
 
-            var fs = File.Open(fileName, FileMode.Open);
+            using var fs = File.Open(fileName, FileMode.Open);
 
-            var obj = formatter.Deserialize(fs);
-            var dep = (Employee)obj;
-            fs.Flush();
-            fs.Close();
-            fs.Dispose();
+            var dep = (Employee)formatter.Deserialize(fs);
 
             return dep;
         }
