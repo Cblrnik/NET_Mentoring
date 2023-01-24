@@ -1,27 +1,25 @@
 ﻿using OOP_Fundamentals.Interfaces;
 using OOP_Fundamentals.Models;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.Json;
 
 namespace OOP_Fundamentals.Dao
 {
-    public class PatentDao : IEntityDao<Patent>
+    public class PatentFileDao : IEntityDao<Patent>
     {
         private readonly List<Patent> _patents;
-        private static readonly PatentDao _instance;
+        private static readonly PatentFileDao _instance;
 
-        public PatentDao() 
+        public PatentFileDao() 
         {
             _patents = LoaderService.Load<Patent>(typeof(Patent));
         }
 
-        public static PatentDao GetInstance()
+        public static PatentFileDao GetInstance()
         {
-            return _instance ?? new PatentDao();
+            return _instance ?? new PatentFileDao();
         }
 
         public void Create(Patent entity)

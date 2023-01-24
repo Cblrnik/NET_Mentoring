@@ -1,6 +1,5 @@
 ﻿using OOP_Fundamentals.Interfaces;
 using OOP_Fundamentals.Models;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,19 +7,19 @@ using System.Text.Json;
 
 namespace OOP_Fundamentals.Dao
 {
-    public class LocalizedBookDao : IEntityDao<LocalizedBook>
+    public class LocalizedBookFileDao : IEntityDao<LocalizedBook>
     {
         private readonly List<LocalizedBook> _localizedBooks;
-        private static readonly LocalizedBookDao _instance;
+        private static readonly LocalizedBookFileDao _instance;
 
-        private LocalizedBookDao()
+        private LocalizedBookFileDao()
         {
             _localizedBooks = LoaderService.Load<LocalizedBook>(typeof(LocalizedBook));
         }
 
-        public static LocalizedBookDao GetInstance()
+        public static LocalizedBookFileDao GetInstance()
         {
-            return _instance ?? new LocalizedBookDao();
+            return _instance ?? new LocalizedBookFileDao();
         }
 
         public void Create(LocalizedBook entity)

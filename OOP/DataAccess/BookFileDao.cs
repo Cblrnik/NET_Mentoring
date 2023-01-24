@@ -1,6 +1,5 @@
 ﻿using OOP_Fundamentals.Interfaces;
 using OOP_Fundamentals.Models;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,19 +7,19 @@ using System.Text.Json;
 
 namespace OOP_Fundamentals.Dao
 {
-    public class BookDao : IEntityDao<Book>
+    public class BookFileDao : IEntityDao<Book>
     {
         private readonly List<Book> _books;
-        private static readonly BookDao _instance;
+        private static readonly BookFileDao _instance;
 
-        private BookDao()
+        private BookFileDao()
         {
             _books = LoaderService.Load<Book>(typeof(Book));
         }
 
-        public static BookDao GetInstance()
+        public static BookFileDao GetInstance()
         {
-            return _instance ?? new BookDao();
+            return _instance ?? new BookFileDao();
         }
 
         public void Create(Book entity)
@@ -60,7 +59,6 @@ namespace OOP_Fundamentals.Dao
 
         private void Save(Book book)
         {
-            //type_#{number}.json 
             var jsonString = JsonSerializer.Serialize(book);
             File.WriteAllText($"{book.GetType().Name}_#{book.Id}.json", jsonString);
         }

@@ -2,7 +2,6 @@
 using OOP_Fundamentals.Models;
 using OOP_Fundamentals.Services;
 using System;
-using System.Collections.Generic;
 
 namespace OOP_Fundamentals
 {
@@ -10,11 +9,10 @@ namespace OOP_Fundamentals
     {
         static void Main(string[] args)
         {
-            //var dao = new BookDao();
             var book = new Book()
             {
                 Id = 1,
-                ISBN = "fiopqufp",
+                ISBN = "9 780997 025491",
                 Authors = new string[] { "Some", "Author" },
                 Title = "123564",
                 DatePublished = DateTime.Now,
@@ -22,13 +20,33 @@ namespace OOP_Fundamentals
                 Publisher = "Awesome"
             };
 
-            ////dao.Create(book);
+            var localizedBook = new LocalizedBook()
+            {
+                Id = 1,
+                ISBN = "9 780997 025491",
+                Authors = new string[] { "Some", "Author" },
+                Title = "123564",
+                DatePublished = DateTime.Now,
+                NumberOfPages = 15,
+                OriginalPublisher = "Publisher",
+                CountryOfLocalization = "CountryOfLocalization",
+                LocalPublisher = "LocalPublisher"
+            };
 
-            ////dao.Update(book);
+            var storage = FileStorage.GetInstance();
+            var consolePrinter = new ConsolePrintService();
 
-            //dao.Delete(book);
-            var results = SearchService.SearchDocumentsByNumber(1);
-            new PrintService().Print(results);
+            //storage.SaveDocument(localizedBook);
+
+            var lib = new Library(storage, consolePrinter);
+
+            lib.PrintAllEntities();
+
+            var docs = SearchService.SearchDocumentsByNumber(2);
+
+            Console.WriteLine("Search:");
+            consolePrinter.Print(docs);
+
         }
     }
 }
