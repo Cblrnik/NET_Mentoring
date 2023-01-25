@@ -74,7 +74,7 @@ namespace ADO.NET_Fundamentals.DAO
             command.Parameters.AddWithValue("@weight", entity.Weight);
             command.Parameters.AddWithValue("@width", entity.Width);
 
-            var reader = command.ExecuteReader();
+            using var reader = command.ExecuteReader();
             if (reader.HasRows)
             {
                 while (reader.Read())
@@ -110,7 +110,7 @@ namespace ADO.NET_Fundamentals.DAO
             using var connection = new SqlConnection(connectionString);
             connection.Open();
             var command = new SqlCommand("SELECT * FROM [Product];", connection);
-            var reader = command.ExecuteReader();
+            using var reader = command.ExecuteReader();
             if (reader.HasRows)
             {
                 try

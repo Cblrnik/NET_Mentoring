@@ -42,7 +42,7 @@ namespace ADO.NET_Fundamentals.DAO
             if (productId.HasValue)
                 command.Parameters.AddWithValue("@ProductId", productId.Value);
 
-            var reader = command.ExecuteReader();
+            using var reader = command.ExecuteReader();
             if (reader.HasRows)
             {
                 var filteredOrders = new List<Order>();
@@ -143,7 +143,7 @@ namespace ADO.NET_Fundamentals.DAO
             command.Parameters.AddWithValue("@updatedDate", entity.UpdatedDate);
             command.Parameters.AddWithValue("@productId", entity.ProductId);
 
-            var reader = command.ExecuteReader();
+            using var reader = command.ExecuteReader();
             if (reader.HasRows)
             {
                 while (reader.Read())
@@ -178,7 +178,7 @@ namespace ADO.NET_Fundamentals.DAO
             using var connection = new SqlConnection(connectionString);
             connection.Open();
             var command = new SqlCommand("SELECT * FROM [Order];", connection);
-            var reader = command.ExecuteReader();
+            using var reader = command.ExecuteReader();
             if (reader.HasRows)
             {
                 try
