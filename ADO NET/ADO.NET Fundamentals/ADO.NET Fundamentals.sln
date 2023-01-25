@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADO.NET Fundamentals", "ADO.NET Fundamentals.csproj", "{0571C000-E835-499B-B452-1BBEE667FFC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADO.NET Fundamentals.Tests", "..\ADO.NET Fundamentals.Tests\ADO.NET Fundamentals.Tests.csproj", "{C48EA3DB-FB39-4090-8F20-8BDAD139CB4B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0571C000-E835-499B-B452-1BBEE667FFC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0571C000-E835-499B-B452-1BBEE667FFC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0571C000-E835-499B-B452-1BBEE667FFC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0571C000-E835-499B-B452-1BBEE667FFC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C48EA3DB-FB39-4090-8F20-8BDAD139CB4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C48EA3DB-FB39-4090-8F20-8BDAD139CB4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C48EA3DB-FB39-4090-8F20-8BDAD139CB4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C48EA3DB-FB39-4090-8F20-8BDAD139CB4B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D6E173C3-6989-48FC-ACD2-8A202BAFCA1C}
+	EndGlobalSection
+EndGlobal
