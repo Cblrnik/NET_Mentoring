@@ -186,7 +186,7 @@ namespace ADO.NET_Fundamentals.DAO
 
                     var order = new Order
                     {
-                        Id = reader["Id"] is null ? 100 : (int)reader["Id"],
+                        Id = (int)reader["Id"],
                         Status = reader["Status"] is null ? Status.NotStarted : (Status)reader["Status"],
                         CreatedDate = reader["CreatedDate"] is null ? DateTime.Now : (DateTime)reader["CreatedDate"],
                         UpdatedDate = reader["UpdatedDate"] is null ? DateTime.Now : (DateTime)reader["UpdatedDate"],
