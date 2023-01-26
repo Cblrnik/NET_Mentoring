@@ -113,28 +113,21 @@ namespace ADO.NET_Fundamentals.DAO
             using var reader = command.ExecuteReader();
             if (reader.HasRows)
             {
-                try
+                while (reader.Read())
                 {
-                    while (reader.Read())
+
+                    var order = new Product
                     {
+                        Id = (int)reader["Id"],
+                        Description = reader["Description"] is null ? "No Description" : (string)reader["Description"],
+                        Height = reader["ProductId"] is null ? 1 : (int)reader["ProductId"],
+                        Name = reader["Name"] is null ? "No Name" : (string)reader["Length"],
+                        Length = reader["Length"] is null ? 1 : (int)reader["Length"],
+                        Weight = reader["Weight"] is null ? 1 : (int)reader["Weight"],
+                        Width = reader["Width"] is null ? 1 : (int)reader["Width"]
+                    };
 
-                        var order = new Product
-                        {
-                            Id = (int)reader["Id"],
-                            Description = (string)reader["Description"],
-                            Height = (int)reader["Height"],
-                            Name = (string)reader["Name"],
-                            Length = (int)reader["Length"],
-                            Weight = (int)reader["Weight"],
-                            Width = (int)reader["Width"]
-                        };
-
-                        _products.Add(order);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
+                    _products.Add(order);
                 }
             }
         }

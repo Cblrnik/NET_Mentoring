@@ -181,26 +181,19 @@ namespace ADO.NET_Fundamentals.DAO
             using var reader = command.ExecuteReader();
             if (reader.HasRows)
             {
-                try
+                while (reader.Read())
                 {
-                    while (reader.Read())
+
+                    var order = new Order
                     {
+                        Id = reader["Id"] is null ? 100 : (int)reader["Id"],
+                        Status = reader["Status"] is null ? Status.NotStarted : (Status)reader["Status"],
+                        CreatedDate = reader["CreatedDate"] is null ? DateTime.Now : (DateTime)reader["CreatedDate"],
+                        UpdatedDate = reader["UpdatedDate"] is null ? DateTime.Now : (DateTime)reader["UpdatedDate"],
+                        ProductId = reader["ProductId"] is null ? 1 : (int)reader["ProductId"]
+                    };
 
-                        var order = new Order
-                        {
-                            Id = (int)reader["Id"],
-                            Status = (Status)reader["Status"],
-                            CreatedDate = (DateTime)reader["CreatedDate"],
-                            UpdatedDate = (DateTime)reader["UpdatedDate"],
-                            ProductId = (int)reader["ProductId"]
-                        };
-
-                        _orders.Add(order);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
+                    _orders.Add(order);
                 }
             }
         }
