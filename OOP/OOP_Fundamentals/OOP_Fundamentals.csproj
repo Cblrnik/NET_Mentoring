@@ -18,7 +18,8 @@
   <ItemGroup>
     <ProjectReference Include="..\DataAccess\FileDataAccess.csproj" />
     <ProjectReference Include="..\Fundamentals.Interfaces\Fundamentals.Interfaces.csproj" />
-    <ProjectReference Include="..\Fundametals.Models\Fundamentals.Models.csproj" />
+    <ProjectReference Include="..\Fundametals.Models\Fundamentals.Entities.csproj" />
+    <ProjectReference Include="..\OOP_Fundamentals.Dao\OOP_Fundamentals.Dao.csproj" />
   </ItemGroup>
 
 </Project>

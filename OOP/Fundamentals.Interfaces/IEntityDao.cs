@@ -1,17 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using OOP_Fundamentals.Entities;
+using System.Collections.Generic;
 
 namespace OOP_Fundamentals.Interfaces
 {
-    public interface IEntityDao<T> where T : class
+    public interface IEntityDao
     {
-        List<T> GetAll();
+        List<Document> GetAll();
 
-        T GetEntity(int id);
+        Document GetEntity(int id);
 
-        void Create(T entity);
+        void Create(Document entity);
 
-        void Update(T entity);
+        void Update(Document entity);
 
-        void Delete(T entity);
+        void Delete(Document entity);
     }
 }

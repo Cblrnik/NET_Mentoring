@@ -1,18 +1,20 @@
 ﻿using ConsoleTables;
 using OOP_Fundamentals.Interfaces;
-using OOP_Fundamentals.Models;
+using OOP_Fundamentals.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace OOP_Fundamentals.Services
 {
     public class ConsolePrintService : IPrinter
     {
-        private void PrintAllEntities<T>(IEnumerable<T> entities)
+        public void Print(IEnumerable<Document> entities)
         {
-            if (entities.Count() == 0)
+            if (entities is null || !entities.Any())
             {
+                Console.WriteLine($"Nothing to print");
                 return;
             }
 
@@ -22,33 +24,6 @@ namespace OOP_Fundamentals.Services
             }
 
             Console.WriteLine();
-        }
-
-        public void Print<Document>(IEnumerable<Document> entities)
-        {
-            if (entities is null || entities.Count() == 0)
-            {
-                Console.WriteLine($"Nothing to print");
-                return;
-            }
-
-            var books = entities.OfType<Book>();
-            if (books.Count() >= 1)
-            {
-                PrintAllEntities(books);
-            }
-
-            var localizedBooks = entities.OfType<LocalizedBook>();
-            if (localizedBooks.Count() >= 1)
-            {
-                PrintAllEntities(localizedBooks);
-            }
-
-            var patents = entities.OfType<Patent>();
-            if (patents.Count() >= 1)
-            {
-                PrintAllEntities(patents);
-            }
         }
     }
 }

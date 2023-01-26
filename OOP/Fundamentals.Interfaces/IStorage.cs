@@ -1,5 +1,5 @@
 ﻿using Fundametals.Models;
-using OOP_Fundamentals.Models;
+using OOP_Fundamentals.Entities;
 using System.Collections.Generic;
 
 namespace OOP_Fundamentals.Interfaces
@@ -12,6 +12,6 @@ namespace OOP_Fundamentals.Interfaces
 
         void DeleteDocument(Document document);
 
-        List<Document> GetAllDocuments(DocumentTypes type = DocumentTypes.All);
+        List<Document> GetAllDocuments(DocumentTypes type);
     }
 }

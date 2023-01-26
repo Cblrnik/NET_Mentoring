@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
+using Newtonsoft.Json;
 
-namespace OOP_Fundamentals.Dao
+namespace FileDataAccess
 {
     public static class LoaderService
     {
@@ -16,7 +16,7 @@ namespace OOP_Fundamentals.Dao
             foreach (var file in files)
             {
                 var jsonString = File.ReadAllText(file);
-                outList.Add(JsonSerializer.Deserialize<T>(jsonString));
+                outList.Add(JsonConvert.DeserializeObject<T>(jsonString));
             }
 
             return outList;

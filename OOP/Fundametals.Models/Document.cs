@@ -1,16 +1,24 @@
 ﻿using System;
 
-namespace OOP_Fundamentals.Models
+namespace OOP_Fundamentals.Entities
 {
     public abstract class Document
     {
-        public int Id { get; set; }
+        public Document(int id, string title, string[] authors, DateTime datePublished)
+        {
+            Id = id;
+            Title = title;
+            Authors = authors;
+            DatePublished = datePublished;
+        }
 
-        public string Title { get; set; }
+        public int Id { get; }
 
-        public string[] Authors { get; set; }
+        public string Title { get; }
 
-        public DateTime DatePublished { get; set; }
+        public string[] Authors { get;}
+
+        public DateTime DatePublished { get; }
 
         public override string ToString()
         {

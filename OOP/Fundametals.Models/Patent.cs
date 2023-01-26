@@ -1,14 +1,22 @@
 ﻿using System;
 
-namespace OOP_Fundamentals.Models
+namespace OOP_Fundamentals.Entities
 {
     public class Patent : Document
     {
-        public int UniqueId { get; set; }
+        public Patent(int id, string title, string[] authors, DateTime datePublished, int uniqueId, string author, DateTime expirationDate)
+            : base(id, title, authors, datePublished)
+        {
+            UniqueId = uniqueId;
+            Author = author;
+            ExpirationDate = expirationDate;
+        }
 
-        public string Author { get; set; }
+        public int UniqueId { get;  }
 
-        public DateTime ExpirationDate { get; set; }
+        public string Author { get; }
+
+        public DateTime ExpirationDate { get; }
 
         public override string ToString()
         {

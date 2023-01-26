@@ -1,12 +1,23 @@
-﻿namespace OOP_Fundamentals.Models
+﻿using System;
+using System.Text.Json.Serialization;
+
+namespace OOP_Fundamentals.Entities
 {
     public class Book : Document
     {
-        public string ISBN { get; set; }
+        public Book(int id, string title, string[] authors, DateTime datePublished, string iSBN, int numberOfPages, string publisher)
+            : base( id, title, authors, datePublished)
+        {
+            ISBN = iSBN;
+            NumberOfPages = numberOfPages;
+            Publisher = publisher;
+        }
 
-        public int NumberOfPages { get; set; }
+        public string ISBN { get; }
 
-        public string Publisher { get; set; }
+        public int NumberOfPages { get; }
+
+        public string Publisher { get; }
 
         public override string ToString()
         {

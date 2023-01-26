@@ -1,19 +1,32 @@
 ﻿using OOP_Fundamentals.Dao;
 using OOP_Fundamentals.Interfaces;
-using OOP_Fundamentals.Models;
+using OOP_Fundamentals.Entities;
 using System.Collections.Generic;
 using System.Linq;
+using System;
+using Fundametals.Models;
+using Fundamentals.Interfaces;
 
 namespace OOP_Fundamentals.Services
 {
-    public static class SearchService
+    public class SearchService : ISearchService
     {
-        private static readonly FileStorage _fileStorage = FileStorage.GetInstance();
-        public static IEnumerable<Document> SearchDocumentsByNumber(int number)
+        private readonly IStorage _storage;
+
+        public SearchService(IStorage storage)
         {
-            var documents = _fileStorage.GetAllDocuments();
+            _storage = storage;
+        }
+        
+        public IEnumerable<Document> SearchDocumentsByNumber(int id)
+        {
+            var documents = new List<Document>();
+            foreach (var item in Enum.GetValues(typeof(DocumentTypes)))
+            {
+                documents.AddRange(_storage.GetAllDocuments((DocumentTypes)item));
+            }
             
-            return documents.Where(doc => doc.Id == number);
+            return documents.Where(doc => doc.Id == id);
         }
     }
 }

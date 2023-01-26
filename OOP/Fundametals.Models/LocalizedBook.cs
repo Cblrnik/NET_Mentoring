@@ -1,16 +1,28 @@
-﻿namespace OOP_Fundamentals.Models
+﻿using System;
+
+namespace OOP_Fundamentals.Entities
 {
     public class LocalizedBook : Document
     {
-        public string ISBN { get; set; }
+        public LocalizedBook(int id, string title, string[] authors, DateTime datePublished, string iSBN, int numberOfPages, string originalPublisher, string countryOfLocalization, string localPublisher)
+            : base(id, title, authors, datePublished)
+        {
+            ISBN = iSBN;
+            NumberOfPages = numberOfPages;
+            OriginalPublisher = originalPublisher;
+            CountryOfLocalization = countryOfLocalization;
+            LocalPublisher = localPublisher;
+        }
 
-        public int NumberOfPages { get; set; }
+        public string ISBN { get; }
 
-        public string OriginalPublisher { get; set; }
+        public int NumberOfPages { get; }
 
-        public string CountryOfLocalization { get; set; }
+        public string OriginalPublisher { get; }
 
-        public string LocalPublisher { get; set; }
+        public string CountryOfLocalization { get; }
+
+        public string LocalPublisher { get; }
 
         public override string ToString()
         {
